@@ -12,30 +12,31 @@ namespace Ui.Testing.Selenium.Pages
             _driver = driver;
         }
 
-        public IWebElement TxtFieldSearch => _driver.FindElement(By.Id("searchboxinput"));
-        public IWebElement BtnSearch => _driver.FindElement(By.Id("searchbox-searchbutton"));
-        public IWebElement BtnDirections => _driver.FindElement(By.CssSelector("button[data-value='Directions']"));
-        public IWebElement DestinationSearchBox => _driver.FindElement(By.CssSelector($"input[aria-label^='Destination']"));
+        public CookiesConsentFrame CookiesConsentFrame => new(_driver);
 
-        public CookiesConsentFrame CookiesConsentFrame => new CookiesConsentFrame(_driver);
-
-        public LocationDetailsWidget LocationDetailsWidget => new LocationDetailsWidget(_driver);
+        public LeftPane LeftPane => new(_driver);
 
         public void AcceptCookies(){
+
             CookiesConsentFrame.AcceptCookies();
         }
 
         public void SearchForLocation(string locationName){
-            TxtFieldSearch.SendKeys(locationName);
-            BtnSearch.Click();
+            LeftPane.SearchForLocation(locationName);
         }
 
         public void ClickBtnDirections(){
-            BtnDirections.Click();
+            LeftPane.ClickBtnDirections();
         }
 
         public bool DestinationContainsExpectedString(string expectedString){
-            return DestinationSearchBox.GetAttribute("aria-label").Contains(expectedString);
+
+            return LeftPane.DestinationContainsExpectedString(expectedString);
+        }
+
+        public bool LocationDetailsContainsExpectedName(string expectedName){
+
+            return LeftPane.LocationDetailsWidget.LocationTitleEqualsExpectedName(expectedName);
         }
     }
 }
